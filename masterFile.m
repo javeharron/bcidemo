@@ -56,10 +56,10 @@ xval05=comparisonTests(totalF,totalL,subs,5,fs);
 xval10=comparisonTests(totalF,totalL,subs,10,fs);
 xval20=comparisonTests(totalF,totalL,subs,20,fs);
 res=[];
-res.01=xval01;
-res.05=xval05;
-res.10=xval10;
-res.20=xval20;
+res.a=xval01;
+res.b=xval05;
+res.c=xval10;
+res.d=xval20;
 save('resLR.mat','res');
 
 %% left vs original nose (o)
@@ -78,10 +78,10 @@ xval05=comparisonTests(totalF,totalL,subs,5,fs);
 xval10=comparisonTests(totalF,totalL,subs,10,fs);
 xval20=comparisonTests(totalF,totalL,subs,20,fs);
 res=[];
-res.01=xval01;
-res.05=xval05;
-res.10=xval10;
-res.20=xval20;
+res.a=xval01;
+res.b=xval05;
+res.c=xval10;
+res.d=xval20;
 save('resLO.mat','res');
 %% l vs center
 features=[];
@@ -100,10 +100,10 @@ xval10=comparisonTests(totalF,totalL,subs,10,fs);
 xval20=comparisonTests(totalF,totalL,subs,20,fs);
 
 res=[];
-res.01=xval01;
-res.05=xval05;
-res.10=xval10;
-res.20=xval20;
+res.a=xval01;
+res.b=xval05;
+res.c=xval10;
+res.d=xval20;
 save('resLC.mat','res');
 %% R vs center
 features=[];
@@ -121,10 +121,10 @@ xval05=comparisonTests(totalF,totalL,subs,5,fs);
 xval10=comparisonTests(totalF,totalL,subs,10,fs);
 xval20=comparisonTests(totalF,totalL,subs,20,fs);
 res=[];
-res.01=xval01;
-res.05=xval05;
-res.10=xval10;
-res.20=xval20;
+res.a=xval01;
+res.b=xval05;
+res.c=xval10;
+res.d=xval20;
 save('resRC.mat','res');
 %% R vs original noise (o)
 features=[];
@@ -142,10 +142,10 @@ xval05=comparisonTests(totalF,totalL,subs,5,fs);
 xval10=comparisonTests(totalF,totalL,subs,10,fs);
 xval20=comparisonTests(totalF,totalL,subs,20,fs);
 res=[];
-res.01=xval01;
-res.05=xval05;
-res.10=xval10;
-res.20=xval20;
+res.a=xval01;
+res.b=xval05;
+res.c=xval10;
+res.d=xval20;
 save('resRO.mat','res');
 
 %% Center vs original noise (o)
@@ -164,8 +164,8 @@ xval05=comparisonTests(totalF,totalL,subs,5,fs);
 xval10=comparisonTests(totalF,totalL,subs,10,fs);
 xval20=comparisonTests(totalF,totalL,subs,20,fs);
 res=[];
-res.01=xval01;
-res.05=xval05;
-res.10=xval10;
-res.20=xval20;
+res.a=xval01;
+res.b=xval05;
+res.c=xval10;
+res.d=xval20;
 save('resOC.mat','res');
