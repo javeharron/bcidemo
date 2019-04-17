@@ -173,17 +173,55 @@ save('resOC.mat','res');
 
 %% load and compare results
 % l vs c
-load('resC.mat','res');
+load('resLC.mat','res');
 [mscores,macc,mf1,mphi]=readResults(res);
+xLC=mean(mphi);
+
+% l vs o
+load('resLO.mat','res');
+[mscores,macc,mf1,mphi]=readResults(res);
+xLO=mean(mphi);
 
 % r vs c
 load('resRC.mat','res');
 [mscores,macc,mf1,mphi]=readResults(res);
+xRC=mean(mphi);
+
 
 % r vs o
 load('resRO.mat','res');
 [mscores,macc,mf1,mphi]=readResults(res);
 
+xRO=mean(mphi);
+
 % o vs c
 load('resOC.mat','res');
 [mscores,macc,mf1,mphi]=readResults(res);
+xOC=mean(mphi);
+
+
+% l vs r
+load('resLR.mat','res');
+[mscores,macc,mf1,mphi]=readResults(res);
+xLR=mean(mphi);
+
+
+%% plot results
+
+figure();
+c = categorical({'PCA','ADEN','ADENZ','ADENZ','GADEN','GADENZ'});
+bar(xLR)
+title('Performance of Feature Selection Methods on 2-Class Left/Right Motor Imagery BCI')
+ylabel('Phi Coefficient') 
+xlabel({'PCA','ADEN','ADENZ','ADENZ','GADEN','GADENZ')
+figure();
+c = categorical({'PCA','ADEN','ADENZ','ADENZ','GADEN','GADENZ'});
+bar(c,xLC)
+title('Performance of Feature Selection Methods on 2-Class Left/Baseline Motor Imagery BCI')
+ylabel('Phi Coefficient') 
+
+figure();
+c = categorical({'PCA','ADEN','ADENZ','ADENZ','GADEN','GADENZ'});
+bar(c,xRC)
+title('Performance of Feature Selection Methods on 2-Class Right/Baseline Motor Imagery BCI')
+ylabel('Phi Coefficient') 

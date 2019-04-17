@@ -205,3 +205,12 @@ load('resLR.mat','res');
 [mscores,macc,mf1,mphi]=readResults(res);
 xLR=mean(mphi);
 
+
+%% plot results
+
+figure();
+bar(xLR)
+title('Feature Selection Performance on 2-Class Motor Imagery BCI')
+ylabel('Performance')
+xlabel('Method')
+%xlabel('PCA','ADEN','ADENZ','ADENZ','GADEN','GADENZ');
