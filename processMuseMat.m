@@ -75,7 +75,7 @@ ubnds=ubnds(1:capper);
 
 
 features=[];
-sampleLabel=[];
+sortedLabel=refNo*ones(1,capper);
 
 %% feature extraction loop
 for up=1:capper;
@@ -87,7 +87,7 @@ features(:,up)=y;
 
 end
 
-
+sortedData=features;
 
 
 
