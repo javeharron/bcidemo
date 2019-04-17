@@ -168,4 +168,40 @@ res.a=xval01;
 res.b=xval05;
 res.c=xval10;
 res.d=xval20;
+
 save('resOC.mat','res');
+
+%% load and compare results
+% l vs c
+load('resLC.mat','res');
+[mscores,macc,mf1,mphi]=readResults(res);
+xLC=mean(mphi);
+
+% l vs o
+load('resLO.mat','res');
+[mscores,macc,mf1,mphi]=readResults(res);
+xLO=mean(mphi);
+
+% r vs c
+load('resRC.mat','res');
+[mscores,macc,mf1,mphi]=readResults(res);
+xRC=mean(mphi);
+
+
+% r vs o
+load('resRO.mat','res');
+[mscores,macc,mf1,mphi]=readResults(res);
+
+xRO=mean(mphi);
+
+% o vs c
+load('resOC.mat','res');
+[mscores,macc,mf1,mphi]=readResults(res);
+xOC=mean(mphi);
+
+
+% l vs r
+load('resLR.mat','res');
+[mscores,macc,mf1,mphi]=readResults(res);
+xLR=mean(mphi);
+
