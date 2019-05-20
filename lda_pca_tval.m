@@ -1,29 +1,27 @@
-function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gadenz_mval(subs,features,labels,pvalue,limits,offspring,generations)
+function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_pca_tval(subs,features,labels,pvalue,delay)
 
 %--------------------------------------------------------------------------
- % LDA_GADENZ_MVAL
+ % LDA_PCA_TVAL
 
- % Last updated: April 2014, J. LaRocco
+ % Last updated: May 2014, J. LaRocco
 
- % Details: Single classifier with GADENZ for feature reduction and LDA for pattern recognition. 
+ % Details: Single classifier with PCA for feature reduction and LDA for pattern recognition. 
 
- % Usage: [mean_measures,mean_phi,mean_phiclassic,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc_sns,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa]=lda_gadenz_mval(subs,features,labels,pvalue,limits,offspring)
+ % Usage: [mean_measures,mean_phi,mean_phiclassic,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc_sns,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa]=lda_pca_tval(subs,features,labels,pvalue,delay)
 
  % Input: 
  %  subs: Number of subjects.  
- %  features: cell-based struct of features. 
+ %  features: cell-based struct of featores. 
  %  labels: cell-based struct of targets. 
  %  pvalue: features to reduce to. 
- %  limits: Size of initial subset (highest averaged distances). 
- %  offspring: Number of offspring to investigate. Keep low for speed. 
- %  generations: number of generations (full cycles)
- 
+ %  delay: latency period (in seconds) to add per trial
+  
  % Output: 
  %  mean_measures: output matrix of all averaged metrics
     % 1st row is mean phi
     % 2st row is mean phi by other means
     % 3rd row is mean accuracy
-    % 4th row is mean sensitivity
+    % 4th row is mean sensitivityo
     % 5th row is mean specificity
     % 6th row is mean accuracy (mean of sensitivity and specificity)
     % 7th row is mean accuracy (calculated in different way than 3rd row, should be the same as value in 3rd row)
@@ -31,11 +29,12 @@ function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_
     % 9th row is mean npv
     % 10th row is f1, with beta=2
     % 11th row is Cohen's kappa
-    % 12th row is information transfer rate (bits/trial)
+    % 12th row is information transfer rate (bits/min)
 %--------------------------------------------------------------------------
 
 mean_measures=[]; 
 a=1:subs;
+
 for vv=1:subs
 test_sub=vv; 
 testing_data=squeeze(features{test_sub});
@@ -44,37 +43,40 @@ arrays1=a;
 arrays1(arrays1==vv) = [];
 train_sub=arrays1;
 num_subs=length(train_sub);
-
 AA = [];
 tic;
 for uu=1:num_subs;
 trainingdata=squeeze(features{train_sub(uu)});
 traininglabel=labels{train_sub(uu)}';
-[training_csp,test_csp,training_mad,test_mad,ga_ind,aden_ind,maden]=feature_selection_gadenz(trainingdata',traininglabel,testing_data',limits,pvalue,offspring,generations);
-reduced_features=training_csp;
-mod_test=test_csp;
+[pcs,newf,var_exp,newf2,tot_var_explained,N2]=feature_selection_pca_alt(trainingdata,testing_data,pvalue);
+reduced_features=newf2;
+mod_test=N2;
 
 dispstr=sprintf('Running validation subject %s through model %s', num2str(vv), num2str(train_sub(uu)));
         disp(dispstr);
-
 traininglabel=traininglabel';
+
 [ypre,clas_err]=stacking_ldam_default_classify(mod_test,reduced_features,traininglabel');
 altout = clas_err*(1/(subs-1));
 AA = [AA altout];
+
 clc;
 end
 timerClass=toc;
+
 AltModelOut = sum(AA,2);
 AltModelOutBin = zeros(1,length(AltModelOut));
 AltModelOutBin(find(AltModelOut>=0.5)) = 1;
 AltModelOutBin(find(AltModelOut<0.4999)) = 0;
 
 [phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa,itr]=correctBinaryOutputs(AltModelOutBin,testing_label);
+
 sNum=length(AltModelOutBin);
+timerClass=timerClass+(delay*sNum);
 sampPerSec=sNum/timerClass;
 itr=itr*sampPerSec*60;
-mean_measures(:,vv)=[phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa,itr];
 
+mean_measures(:,vv)=[phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa,itr];
 
 end
 mean_phi=mean(mean_measures(1,:));

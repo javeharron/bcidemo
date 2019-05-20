@@ -158,6 +158,8 @@ labels{1}=0*sortedLabelC;
 labels{2}=sortedLabelO;
 
 [totalF,totalL]=dataMixer(features,labels,[1:1:subs],subs);
+x=4.45;
+pause(x);
 
 xval01=comparisonTests(totalF,totalL,subs,1,fs);
 xval05=comparisonTests(totalF,totalL,subs,5,fs);
@@ -213,4 +215,12 @@ bar(xLR)
 title('Feature Selection Performance on 2-Class Motor Imagery BCI')
 ylabel('Performance')
 xlabel('Method')
+
+figure();
+bar(xRO)
+title('Feature Selection Performance on Events vs. Noise')
+ylabel('Performance')
+xlabel('Method')
+ 
+
 %xlabel('PCA','ADEN','ADENZ','ADENZ','GADEN','GADENZ');

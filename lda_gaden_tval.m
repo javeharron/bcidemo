@@ -1,13 +1,13 @@
-function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gadenz_mval(subs,features,labels,pvalue,limits,offspring,generations)
+function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gaden_tval(subs,features,labels,pvalue,limits,offspring,generations,delay)
 
 %--------------------------------------------------------------------------
- % LDA_GADENZ_MVAL
+ % LDA_GADEN_TVAL
 
  % Last updated: April 2014, J. LaRocco
 
- % Details: Single classifier with GADENZ for feature reduction and LDA for pattern recognition. 
+ % Details: Single classifier with GADEN for feature reduction and LDA for pattern recognition. 
 
- % Usage: [mean_measures,mean_phi,mean_phiclassic,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc_sns,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa]=lda_gadenz_mval(subs,features,labels,pvalue,limits,offspring)
+ % Usage: [mean_measures,mean_phi,mean_phiclassic,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc_sns,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gaden_tval(subs,features,labels,pvalue,limits,offspring,delay)
 
  % Input: 
  %  subs: Number of subjects.  
@@ -17,6 +17,7 @@ function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_
  %  limits: Size of initial subset (highest averaged distances). 
  %  offspring: Number of offspring to investigate. Keep low for speed. 
  %  generations: number of generations (full cycles)
+ %  delay: latency period (in seconds) to add per trial
  
  % Output: 
  %  mean_measures: output matrix of all averaged metrics
@@ -48,9 +49,14 @@ num_subs=length(train_sub);
 AA = [];
 tic;
 for uu=1:num_subs;
+      
+    
 trainingdata=squeeze(features{train_sub(uu)});
+
 traininglabel=labels{train_sub(uu)}';
-[training_csp,test_csp,training_mad,test_mad,ga_ind,aden_ind,maden]=feature_selection_gadenz(trainingdata',traininglabel,testing_data',limits,pvalue,offspring,generations);
+
+[training_csp,test_csp,training_mad,test_mad,ga_ind,aden_ind,maden]=feature_selection_gaden(trainingdata',traininglabel,testing_data',limits,pvalue,offspring,generations);
+
 reduced_features=training_csp;
 mod_test=test_csp;
 
@@ -59,7 +65,8 @@ dispstr=sprintf('Running validation subject %s through model %s', num2str(vv), n
 
 traininglabel=traininglabel';
 [ypre,clas_err]=stacking_ldam_default_classify(mod_test,reduced_features,traininglabel');
-altout = clas_err*(1/(subs-1));
+
+ altout = clas_err*(1/(subs-1));
 AA = [AA altout];
 clc;
 end
@@ -71,10 +78,10 @@ AltModelOutBin(find(AltModelOut<0.4999)) = 0;
 
 [phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa,itr]=correctBinaryOutputs(AltModelOutBin,testing_label);
 sNum=length(AltModelOutBin);
+timerClass=timerClass+(delay*sNum);
 sampPerSec=sNum/timerClass;
 itr=itr*sampPerSec*60;
 mean_measures(:,vv)=[phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa,itr];
-
 
 end
 mean_phi=mean(mean_measures(1,:));

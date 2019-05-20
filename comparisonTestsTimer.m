@@ -1,8 +1,8 @@
 
-function xval=comparisonTests(features,labels,subs,p,fs,delay)
+function xval=comparisonTestsTimer(features,labels,subs,p,fs,delay)
 
 %--------------------------------------------------------------------------
- % comparisonTests
+ % comparisonTestsTimer
 
  % Last updated: April 2019, J. LaRocco
 
@@ -15,7 +15,8 @@ function xval=comparisonTests(features,labels,subs,p,fs,delay)
  %  features: cell-based struct of features. 
  %  labels: cell-based struct of targets. 
  %  p: positive integer number of features.
- %  fs: positive integer sampling frequency. 
+ %  fs: positive integer sampling frequency.
+ %  delay: latency period (in seconds) to add per trial
  
  % Output: 
  %  xval: a struct containing the performance results. 
@@ -30,7 +31,7 @@ xval.subs=subs;
 %timer
 % pause
 % System configurations
-[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_pca_mval(subs,features,labels,p);
+[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_pca_tval(subs,features,labels,p,delay);
 
 xval.lda.pca.mean.acc=mean_accuracy; 
 xval.lda.pca.mean.sens=mean_sensitivity; 
@@ -41,7 +42,7 @@ xval.lda.pca.mean.f1=mean_f1;
 xval.lda.pca.mean.kappa=mean_kappa; 
 xval.lda.pca.mean.itr=mean_itr; 
 
-[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_aden_mval(subs,features,labels,p);
+[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_aden_tval(subs,features,labels,p,delay);
 
 xval.lda.aden.mean.acc=mean_accuracy; 
 xval.lda.aden.mean.sens=mean_sensitivity; 
@@ -52,7 +53,7 @@ xval.lda.aden.mean.f1=mean_f1;
 xval.lda.aden.mean.kappa=mean_kappa; 
 xval.lda.aden.mean.itr=mean_itr; 
 
-[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_adenz_mval(subs,features,labels,p);
+[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_adenz_tval(subs,features,labels,p,delay);
 
 xval.lda.adenz.mean.acc=mean_accuracy; 
 xval.lda.adenz.mean.sens=mean_sensitivity; 
@@ -64,7 +65,7 @@ xval.lda.adenz.mean.kappa=mean_kappa;
 xval.lda.adenz.mean.itr=mean_itr; 
 
 
-[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gaden_mval(subs,features,labels,p,p,2,2);
+[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gaden_tval(subs,features,labels,p,p,2,2,delay);
 
 xval.lda.gaden.mean.acc=mean_accuracy; 
 xval.lda.gaden.mean.sens=mean_sensitivity; 
@@ -75,7 +76,7 @@ xval.lda.gaden.mean.f1=mean_f1;
 xval.lda.gaden.mean.kappa=mean_kappa; 
 xval.lda.gaden.mean.itr=mean_itr; 
 
-[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gadenz_mval(subs,features,labels,p,p,2,2);
+[mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gadenz_tval(subs,features,labels,p,p,2,2,delay);
 
 xval.lda.gadenz.mean.acc=mean_accuracy; 
 xval.lda.gadenz.mean.sens=mean_sensitivity; 

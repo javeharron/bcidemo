@@ -1,4 +1,4 @@
-function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa]=lda_gaden_mval(subs,features,labels,pvalue,limits,offspring,generations)
+function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_sensitivity,mean_specificity,mean_acc2,mean_ppv,mean_npv,mean_f1,mean_kappa,mean_itr]=lda_gaden_mval(subs,features,labels,pvalue,limits,offspring,generations)
 
 %--------------------------------------------------------------------------
  % LDA_GADEN_MVAL
@@ -31,6 +31,7 @@ function [mean_measures,mean_phi,mean_phiclassic,mean_aucroc,mean_accuracy,mean_
     % 9th row is mean npv
     % 10th row is f1, with beta=2
     % 11th row is Cohen's kappa
+    % 12th row is information transfer rate (bits/trial)
 %--------------------------------------------------------------------------
 
 mean_measures=[]; 
@@ -45,6 +46,7 @@ train_sub=arrays1;
 num_subs=length(train_sub);
 
 AA = [];
+tic;
 for uu=1:num_subs;
       
     
@@ -67,14 +69,17 @@ traininglabel=traininglabel';
 AA = [AA altout];
 clc;
 end
+timerClass=toc;
 AltModelOut = sum(AA,2);
 AltModelOutBin = zeros(1,length(AltModelOut));
 AltModelOutBin(find(AltModelOut>=0.5)) = 1;
 AltModelOutBin(find(AltModelOut<0.4999)) = 0;
 
-[phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa]=correctBinaryOutputs(AltModelOutBin,testing_label);
-mean_measures(:,vv)=[phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa];
-
+[phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa,itr]=correctBinaryOutputs(AltModelOutBin,testing_label);
+sNum=length(AltModelOutBin);
+sampPerSec=sNum/timerClass;
+itr=itr*sampPerSec*60;
+mean_measures(:,vv)=[phi,phiclassic,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa,itr];
 
 end
 mean_phi=mean(mean_measures(1,:));
@@ -88,5 +93,6 @@ mean_ppv=mean(mean_measures(8,:));
 mean_npv=mean(mean_measures(9,:));
 mean_f1=mean(mean_measures(10,:));
 mean_kappa=mean(mean_measures(11,:));
+mean_itr=mean(mean_measures(12,:));
 
 end

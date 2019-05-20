@@ -1,4 +1,4 @@
-function [phi,roc,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa]=correctBinaryOutputs(C,testing_label)
+function [phi,roc,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa,itr]=correctBinaryOutputs(C,testing_label)
 
 %--------------------------------------------------------------------------
 % correctBinaryOutputs
@@ -21,6 +21,7 @@ function [phi,roc,auc_roc,accuracy,sensitivity,specificity,acc2,ppv,npv,f1,kappa
 % Output:
 %  phi: phi correlation
 %  roc: roc coefficients
+%  itr: information transfer rate
 %  auc_roc: product of roc coefficients
 %  accuracy: accuracy 
 %  sensitivity: sensitivity 
@@ -65,8 +66,9 @@ npv=tn/(tn+fn);
 tpr=sensitivity; %y axis
 fpr=1-specificity; %x axis
 roc=[fpr,tpr];
-auc_roc=roc(1)*roc(2);
 
+auc_roc=roc(1)*roc(2);
+roc=mean(roc);
 %phi
 n_1dot=tp+fp;
 n_0dot=tn+fn;
@@ -97,5 +99,13 @@ f1 = prototype_cleanup((1 + beta1^2).*(precision2.*recall2)./((beta1^2.*precisio
 pre=((tp+fn)/check_sum)*((tp+fp)/check_sum)+(1-((tp+fn)/check_sum))*(1-((tp+fp)/check_sum));
 kappa=(((tn+tp)/check_sum)-pre)/(1-pre);
 
-
+% 2 class ITR
+N=2;
+itr1=log2(N);
+itr2=(accuracy*log2(accuracy));
+itr3=((1-accuracy)*log2((1-accuracy)/(N-1)));
+%itr=log2(N)+(accuracy*log2(accuracy))-((1-accuracy)*log2((1-accuracy)/(N-1)));
+itr=prototype_cleanup(itr1)+prototype_cleanup(itr2)-prototype_cleanup(itr3);
+kappa=prototype_cleanup(kappa);
+%itr=prototype_cleanup(itr);
 end
