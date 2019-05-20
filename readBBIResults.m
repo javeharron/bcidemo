@@ -30,7 +30,7 @@ mitr=zeros(1,5);
 %% unpack each case
 
 
-xval10=res.c;
+xval10=res.control.c;
 [scores,acc,f1,phi,itr]=unwrapStruct(xval10);
 macc(1,:)=acc;
 mf1(1,:)=f1;
