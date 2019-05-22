@@ -56,7 +56,7 @@ overlap=.1;
 
 channels=4;
 
-numberOfTargets=6;
+
 eegAdjusted=eegAdjusted(:,1:channels);
 eegAdjusted=eegAdjusted';
 

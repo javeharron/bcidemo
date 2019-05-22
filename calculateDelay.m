@@ -36,7 +36,10 @@ restimTime(failKey)=1;
 %% extra stimulation
 failTwiceIndex=ceil(failChance*failChance*vectorLength);
 if failTwiceIndex > 1;
-failKey2=rollDice((failIndex+1):(failIndex+failTwiceIndex));
+    endPoints=min([(failIndex+failTwiceIndex),(length(rollDice)-1)]);
+    startPoints=(failIndex+1);
+    
+failKey2=rollDice(startPoints:endPoints);
 restimTime(failKey2)=2;
 
 end

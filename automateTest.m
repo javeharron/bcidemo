@@ -89,6 +89,16 @@ res.accuracy=macc;
 res.f1=mf1;
 res.phi=mphi;
 res.itr=mitr;
+res.maxitr=max(max(mitr));
+
+%% itr in bits per trial
+P=macc(find(mitr==max(max(mitr))));
+N=2;
+rawitr1=log2(N);
+rawitr2=P*log2(P);
+rawitr3=(1-P)*log2((1-P)/(N-1));
+rawitr=rawitr1+rawitr2+rawitr3;
+res.rawitr=rawitr;
 
 
 end

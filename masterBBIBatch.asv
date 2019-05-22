@@ -28,37 +28,59 @@ load minhRight.mat;
 
 %% set initial variables
 
-res=[];
+
 subs=2;
 refNo=1;
 fs=220;
 featureVector=[1,5,10,20];
 
 classRatioValues=[.05:.05:1];
-failChanceValues=[.05:.05:1];
+failChanceValues=[0:.05:1];
 
-
+solutionSpace=zeros(length(classRatioValues),length(failChanceValues));
+solutionSpaceRaw=zeros(length(classRatioValues),length(failChanceValues));
 classRatio=.25;
 latency=.5;
 timeOut=1;
 failChance=0.05;
+timeOutValues=[.1:.1:2];
+latencyValues=[.1:.1:1];
 
-for i=1:length(
-res=initializeParams(refNo,latency,failChance,timeOut,fs,subs,classRatio,featureVector);
+for ii=1:length(classRatioValues)
+    for i=1:length(failChanceValues)
+        for iiii=1:length(timeOutValues)
+            for iii=1:length(latencyValues)
+        res=initializeParams(refNo,latencyValues(iii),failChanceValues(i),timeOutValues(iiii),fs,subs,classRatioValues(ii),featureVector);
 
 %% run tests
-res=automateTest(res,featuresL,featuresR,sortedLabelL,sortedLabelR);
+        res=automateTest(res,featuresL,featuresR,sortedLabelL,sortedLabelR);
 
 %% save results
-
-filename=['simulated.bbi.subject.' num2str(refNo) '.classRatio.' num2str(classRatio*100) '.failChance.' num2str(failChance*100) '.mat'];
-save(filename,'res');
-
-res=[];
-
+        
+        filename=['simulated.bbi.subject.' num2str(refNo) '.classRatio.' num2str(classRatioValues(ii)*100) '.failChance.' num2str(failChanceValues(i)*100) '.latencyMS.' num2str(latencyValues(iii)*1000) '.timeOutMS.' num2str(timeOutValues(iiii)*1000) '.mat'];
+        save(filename,'res');
+%% fill solution space
+        solutionSpace(ii,i,iii,iii)=res.maxitr;
+        solutionSpaceRaw(ii,i)=res.rawitr;
+        save('lastSolutions.mat','solutionSpace');
+        save('lastSolutionsRaw.mat','solutionSpaceRaw');
+        res=[];
+            end
+        end
+    end
 end
-
 %% plot results
+% figure;
+% surf(solutionSpace); 
+% zlabel('ITR (bits/min)')
+% xlabel('Class Balance (%)');
+% ylabel('Fail Chance (%)');
+% 
+% figure;
+% surf(solutionSpaceRaw); 
+% zlabel('ITR (bits/trial)')
+% xlabel('Class Balance (%)');
+% ylabel('Fail Chance (%)');
 
 % 
 % figure();
