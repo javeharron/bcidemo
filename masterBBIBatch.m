@@ -71,7 +71,7 @@ for ii=1:length(classRatioValues)
 end
 %% plot results
 % plot class (50/50), failchance=0
-
+solutionSpace=solutionSpace/600;
 figure;
 % plot class (50/50), failchance=0
 evenITR0=squeeze(solutionSpace(5,1,:,:));
